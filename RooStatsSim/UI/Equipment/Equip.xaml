@@ -211,10 +211,22 @@
                     <Image x:Name="Image_Char" Grid.RowSpan="5" Grid.Row="0" Grid.Column="1" Width="100" Stretch="Fill"/>
 
                     <Border Style="{Binding Source={StaticResource Tree_Border}}">
-                        <ContentControl MouseDoubleClick="SelectGear_MouseDoubleClick" Tag="GEAR">
+                        <ContentControl MouseDoubleClick="GearPanel_MouseDoubleClick" Tag="GEAR">
                             <StackPanel Orientation="Vertical" Background="GhostWhite" x:Name="gear_panel">
                                 <Image Style="{Binding Source={StaticResource ItemImage}}"/>
                                 <TextBlock Text="기어" Margin="10,0,0,0"/>
+                                <ItemsControl Margin="40,-40,0,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Rows="3" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{Binding Source={StaticResource GearText}}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </ContentControl>
                     </Border>

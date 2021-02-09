@@ -31,6 +31,7 @@ namespace RooStatsSim.UI.Equipment
         ItemListFilter EquipItemList;
         ItemListFilter CardItemList;
         ItemListFilter EnchantList;
+        ItemListFilter GearItemList;
         Popup itemPopup = new Popup();
 
         EQUIP_TYPE_ENUM now_selected_equip_type = EQUIP_TYPE_ENUM.BACK_DECORATION+1;
@@ -70,6 +71,7 @@ namespace RooStatsSim.UI.Equipment
             now_selected_equip_type = (EQUIP_TYPE_ENUM)Enum.Parse(typeof(EQUIP_TYPE_ENUM), (string)((sender as ContentControl).Tag));
             EquipItemList = new ItemListFilter(ref _user_data, ITEM_TYPE_ENUM.EQUIPMENT, now_selected_equip_type);
             ItemSelector.ItemsSource = EquipItemList;
+
             if (_user_data.Equip.Dic.ContainsKey(now_selected_equip_type))
             {
                 CardItemList = new ItemListFilter(ref _user_data, ITEM_TYPE_ENUM.CARD, now_selected_equip_type);
@@ -125,6 +127,7 @@ namespace RooStatsSim.UI.Equipment
             ItemSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.EQUIPMENT, equip_type);
             CardSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.CARD, equip_type);
             EnchantSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.ENCHANT, equip_type);
+            
         }
 
         private StackPanel GetEquipTypeItem(EQUIP_TYPE_ENUM equip_type)
@@ -264,9 +267,25 @@ namespace RooStatsSim.UI.Equipment
         }
         #endregion
         #region Gear Item Selector
-        private void SelectGear_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void GearPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            //now_selected_equip_type = (EQUIP_TYPE_ENUM)Enum.Parse(typeof(EQUIP_TYPE_ENUM), (string)((sender as ContentControl).Tag));
+            EquipItemList = new ItemListFilter(ref _user_data, ITEM_TYPE_ENUM.EQUIPMENT, now_selected_equip_type);
+            ItemSelector.ItemsSource = EquipItemList;
 
+            if (_user_data.Equip.Dic.ContainsKey(now_selected_equip_type))
+            {
+                CardItemList = new ItemListFilter(ref _user_data, ITEM_TYPE_ENUM.CARD, now_selected_equip_type);
+                CardSelector.ItemsSource = CardItemList;
+                EnchantList = new ItemListFilter(ITEM_TYPE_ENUM.ENCHANT, now_selected_equip_type);
+                EnchantSelector.ItemsSource = EnchantList;
+
+                SetUsedItem(now_selected_equip_type);
+            }
+            else
+                ItemSelected.ItemsSource = new UsedItemList();
+
+            ItemSlectorTab.SelectedIndex = 0;
         }
         #endregion
     }

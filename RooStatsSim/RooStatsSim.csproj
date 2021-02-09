@@ -130,6 +130,10 @@
     <Compile Include="DB\ConsumableItem\ConsumableBuffInfo.cs" />
     <Compile Include="DB\ConsumableItem\PortionConsumable.cs" />
     <Compile Include="DB\DBlist.cs" />
+    <Compile Include="DB\Gear\AdvancedGear.cs" />
+    <Compile Include="DB\Gear\GearInfo.cs" />
+    <Compile Include="DB\Gear\Gear_DB.cs" />
+    <Compile Include="DB\Gear\NormalGear.cs" />
     <Compile Include="DB\ItemDB.cs" />
     <Compile Include="DB\Job\SkillInfo.cs" />
     <Compile Include="DB\Job\JobInfo\LordKnight.cs" />

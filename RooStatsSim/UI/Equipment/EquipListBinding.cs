@@ -76,16 +76,20 @@ class ItemListFilter : ObservableCollection<EquipId>
     }
     public ItemListFilter(ITEM_TYPE_ENUM itemtype, EQUIP_TYPE_ENUM equiptype)
     {
-        if (itemtype != ITEM_TYPE_ENUM.ENCHANT)
+        if (itemtype != ITEM_TYPE_ENUM.ENCHANT && itemtype != ITEM_TYPE_ENUM.GEAR)
             return;
-        foreach (KeyValuePair<string, EnchantInfo> itemPair in Equip._enchant_db.Dic)
+        if (itemtype == ITEM_TYPE_ENUM.ENCHANT)
         {
-            Add(new EquipId()
+            foreach (KeyValuePair<string, EnchantInfo> itemPair in Equip._enchant_db.Dic)
             {
-                Name_Eng = itemPair.Value.NAME,
-                Name = itemPair.Value.NAME_KOR
-            });
+                Add(new EquipId()
+                {
+                    Name_Eng = itemPair.Value.NAME,
+                    Name = itemPair.Value.NAME_KOR
+                });
+            }
         }
+        
     }
 
     Dictionary<int, ItemDB> GetItemList(ITEM_TYPE_ENUM itemtype, EQUIP_TYPE_ENUM equiptype = EQUIP_TYPE_ENUM.HEAD_TOP)
