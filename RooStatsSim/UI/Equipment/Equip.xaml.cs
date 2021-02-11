@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 
 using RooStatsSim.DB.Table;
 using RooStatsSim.DB.Enchant;
+using RooStatsSim.DB.Gear;
 using RooStatsSim.User;
 using RooStatsSim.Extension;
 
@@ -26,12 +27,14 @@ namespace RooStatsSim.UI.Equipment
             ENCHANT_ITEM_CTRL,
         }
         public static Enchant_DB _enchant_db = new Enchant_DB();
+        public static Gear_DB _gear_db = new Gear_DB();
+        public bool Gear_Card = false;
 
         UserData _user_data;
         ItemListFilter EquipItemList;
         ItemListFilter CardItemList;
         ItemListFilter EnchantList;
-        ItemListFilter GearItemList;
+        ItemListFilter GearList;
         Popup itemPopup = new Popup();
 
         EQUIP_TYPE_ENUM now_selected_equip_type = EQUIP_TYPE_ENUM.BACK_DECORATION+1;
@@ -123,11 +126,20 @@ namespace RooStatsSim.UI.Equipment
             StackPanel now_panel = GetEquipTypeItem(equip_type);
             if (now_panel == null)
                 return;
-            
-            ItemSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.EQUIPMENT, equip_type);
-            CardSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.CARD, equip_type);
-            EnchantSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.ENCHANT, equip_type);
-            
+            if (equip_type == EQUIP_TYPE_ENUM.BACK_DECORATION + 1)
+            {
+                ItemSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.EQUIPMENT, equip_type);
+                CardSelected.IsEnabled = false;
+                EnchantSelected.IsEnabled = false;
+                Gear_Card = false;
+            }
+            else
+            {
+                Gear_Card = true;
+                ItemSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.EQUIPMENT, equip_type);
+                CardSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.CARD, equip_type);
+                EnchantSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.ENCHANT, equip_type);
+            }
         }
 
         private StackPanel GetEquipTypeItem(EQUIP_TYPE_ENUM equip_type)
@@ -158,6 +170,8 @@ namespace RooStatsSim.UI.Equipment
                     return costume_panel;
                 case EQUIP_TYPE_ENUM.BACK_DECORATION:
                     return back_deco_panel;
+                case EQUIP_TYPE_ENUM.BACK_DECORATION + 1:
+                    return gear_panel;
             }
             return null;
         }
@@ -190,16 +204,23 @@ namespace RooStatsSim.UI.Equipment
         #region Equipment Item Selector
         private void SelectItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            EquipId item = ((sender as ContentControl).Content as StackPanel).DataContext as EquipId;
+            if(now_selected_equip_type != EQUIP_TYPE_ENUM.BACK_DECORATION + 1)
+            {
+                EquipId item = ((sender as ContentControl).Content as StackPanel).DataContext as EquipId;
 
-            if (!_user_data.Equip.Dic.ContainsKey(now_selected_equip_type))
-                _user_data.Equip.Dic[now_selected_equip_type] = new EQUIP.EquipItem();
-            _user_data.Equip.Dic[now_selected_equip_type].EquipType = now_selected_equip_type;
-            _user_data.Equip.Dic[now_selected_equip_type].Equip = item.Id;
-            _user_data.Equip.Dic[now_selected_equip_type].Refine = item.Refine;
+                if (!_user_data.Equip.Dic.ContainsKey(now_selected_equip_type))
+                    _user_data.Equip.Dic[now_selected_equip_type] = new EQUIP.EquipItem();
+                _user_data.Equip.Dic[now_selected_equip_type].EquipType = now_selected_equip_type;
+                _user_data.Equip.Dic[now_selected_equip_type].Equip = item.Id;
+                _user_data.Equip.Dic[now_selected_equip_type].Refine = item.Refine;
 
-            SetUserItemChanged(item, now_selected_equip_type);
-            ItemSlectorTab.SelectedIndex = 1;
+                SetUserItemChanged(item, now_selected_equip_type);
+                ItemSlectorTab.SelectedIndex = 1;
+            }
+            else
+            {
+
+            }
         }
         private void Item_RefineWheel(object sender, MouseWheelEventArgs e)
         {
@@ -269,9 +290,12 @@ namespace RooStatsSim.UI.Equipment
         #region Gear Item Selector
         private void GearPanel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //now_selected_equip_type = (EQUIP_TYPE_ENUM)Enum.Parse(typeof(EQUIP_TYPE_ENUM), (string)((sender as ContentControl).Tag));
-            EquipItemList = new ItemListFilter(ref _user_data, ITEM_TYPE_ENUM.EQUIPMENT, now_selected_equip_type);
+            now_selected_equip_type = EQUIP_TYPE_ENUM.BACK_DECORATION + 1;
+
+            GearList = new ItemListFilter(ITEM_TYPE_ENUM.GEAR, now_selected_equip_type);
             ItemSelector.ItemsSource = EquipItemList;
+            
+            //if (_user_data.Gear.)
 
             if (_user_data.Equip.Dic.ContainsKey(now_selected_equip_type))
             {
@@ -286,6 +310,22 @@ namespace RooStatsSim.UI.Equipment
                 ItemSelected.ItemsSource = new UsedItemList();
 
             ItemSlectorTab.SelectedIndex = 0;
+        }
+        void SetGearTextBlock(EquipId item)
+        {
+            GearInfo gear_info = Equip._gear_db.Dic[item.Name_Eng];
+            string txt;
+            if (gear_info.IsAdvanced)
+                txt = gear_info.NAME_KOR + " " + Convert.ToString(item.Point);
+            else
+                txt = gear_info.NAME_KOR + " " + Convert.ToString(item.Point);
+
+            TextBlock PopupText = new TextBlock
+            {
+                Text = txt,
+                Background = Brushes.Silver
+            };
+            itemPopup.Child = PopupText;
         }
         #endregion
     }

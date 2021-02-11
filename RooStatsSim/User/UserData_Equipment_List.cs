@@ -205,23 +205,42 @@ namespace RooStatsSim.User
     [Serializable]
     public class GEAR
     {
-        public ObservableCollection<ItemDB> List { get; }
+        //public ObservableCollection<ItemDB> List { get; }
+
         public GEAR()
         {
-            List = new ObservableCollection<ItemDB>();
-            List.CollectionChanged += OnListChanged;
+            //List = new ObservableCollection<ItemDB>();
+            //List.CollectionChanged += OnListChanged;
 
-            foreach (string equip_type in Enum.GetNames(typeof(EQUIP_TYPE_ENUM)))
-            {
-                List.Add(new ItemDB());
-            }
-        }
-        private void OnListChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            //if (Convert.ToInt32(args.NewItems[0]) < 0)
+            //foreach (string equip_type in Enum.GetNames(typeof(EQUIP_TYPE_ENUM)))
             //{
-            //    List[args.NewStartingIndex] = Convert.ToInt32(args.OldItems[0]);
+            //    List.Add(new ItemDB());
             //}
+
+
+
+
+
+        }
+        //private void OnListChanged(object sender, NotifyCollectionChangedEventArgs args)
+        //{
+        //    //if (Convert.ToInt32(args.NewItems[0]) < 0)
+        //    //{
+        //    //    List[args.NewStartingIndex] = Convert.ToInt32(args.OldItems[0]);
+        //    //}
+        //}
+
+        public class Enchant_param
+        {
+            public string Name { get; set; }
+            public int Point { get; set; }
+
+            public Enchant_param() { Name = ""; Point = 0; }
+            public Enchant_param(string name, int point)
+            {
+                Name = name;
+                Point = point;
+            }
         }
     }
 }

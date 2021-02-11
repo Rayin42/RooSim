@@ -486,6 +486,15 @@
                         </TabItem.Header>
                         <StackPanel Orientation="Vertical">
                             <ItemsControl x:Name="CardSelected">
+                                <ItemsControl.Style>
+                                    <Style TargetType="ItemsControl">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Equip.Gear_Card}" Value="false">
+                                                <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ItemsControl.Style>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <UniformGrid Columns="6" />

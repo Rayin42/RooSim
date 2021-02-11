@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using RooStatsSim.DB.Enchant;
+using RooStatsSim.DB.Gear;
 
 namespace RooStatsSim.UI.Equipment
 {
@@ -89,7 +90,19 @@ class ItemListFilter : ObservableCollection<EquipId>
                 });
             }
         }
-        
+        else if (itemtype == ITEM_TYPE_ENUM.GEAR)
+        {
+            foreach (KeyValuePair<string, GearInfo> itemPair in Equip._gear_db.Dic)
+            {
+                Add(new EquipId()
+                {
+                    Name_Eng = itemPair.Value.NAME,
+                    Name = itemPair.Value.NAME_KOR
+                });
+            }
+        }
+
+
     }
 
     Dictionary<int, ItemDB> GetItemList(ITEM_TYPE_ENUM itemtype, EQUIP_TYPE_ENUM equiptype = EQUIP_TYPE_ENUM.HEAD_TOP)
@@ -150,6 +163,11 @@ class UsedItemList : ObservableCollection<EquipId>
                 }
                 break;
             case ITEM_TYPE_ENUM.GEAR:
+                Add(new EquipId()
+                {
+                    Id = user_item.EquipInfo.Id,
+                    Name = user_item.EquipInfo.Name,
+                });
                 break;
             default:
                 break;
