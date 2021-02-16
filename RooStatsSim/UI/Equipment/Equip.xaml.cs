@@ -28,7 +28,6 @@ namespace RooStatsSim.UI.Equipment
         }
         public static Enchant_DB _enchant_db = new Enchant_DB();
         public static Gear_DB _gear_db = new Gear_DB();
-        public bool Gear_Card = false;
 
         UserData _user_data;
         ItemListFilter EquipItemList;
@@ -129,13 +128,9 @@ namespace RooStatsSim.UI.Equipment
             if (equip_type == EQUIP_TYPE_ENUM.BACK_DECORATION + 1)
             {
                 ItemSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.EQUIPMENT, equip_type);
-                CardSelected.IsEnabled = false;
-                EnchantSelected.IsEnabled = false;
-                Gear_Card = false;
             }
             else
             {
-                Gear_Card = true;
                 ItemSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.EQUIPMENT, equip_type);
                 CardSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.CARD, equip_type);
                 EnchantSelected.ItemsSource = new UsedItemList(_user_data.Equip.Dic[equip_type], ITEM_TYPE_ENUM.ENCHANT, equip_type);
@@ -293,8 +288,13 @@ namespace RooStatsSim.UI.Equipment
             now_selected_equip_type = EQUIP_TYPE_ENUM.BACK_DECORATION + 1;
 
             GearList = new ItemListFilter(ITEM_TYPE_ENUM.GEAR, now_selected_equip_type);
-            ItemSelector.ItemsSource = EquipItemList;
+            ItemSelector.ItemsSource = GearList;
             
+            CardSelected.IsEnabled = false;
+            CardSelector.IsEnabled = false;
+            EnchantSelected.IsEnabled = false;
+            EnchantSelector.IsEnabled = false;
+
             //if (_user_data.Gear.)
 
             if (_user_data.Equip.Dic.ContainsKey(now_selected_equip_type))

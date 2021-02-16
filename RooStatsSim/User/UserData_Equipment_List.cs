@@ -207,6 +207,20 @@ namespace RooStatsSim.User
     {
         //public ObservableCollection<ItemDB> List { get; }
 
+        [Serializable]
+        public class EquipGear
+        {
+            public string Name { get; set; }
+            public int Point { get; set; }
+            public EquipGear() { Name = ""; Point = 0; }
+            public EquipGear(string name, int point)
+            {
+                Name = name;
+                Point = point;
+            }
+
+
+        }
         public GEAR()
         {
             //List = new ObservableCollection<ItemDB>();
@@ -229,18 +243,5 @@ namespace RooStatsSim.User
         //    //    List[args.NewStartingIndex] = Convert.ToInt32(args.OldItems[0]);
         //    //}
         //}
-
-        public class Enchant_param
-        {
-            public string Name { get; set; }
-            public int Point { get; set; }
-
-            public Enchant_param() { Name = ""; Point = 0; }
-            public Enchant_param(string name, int point)
-            {
-                Name = name;
-                Point = point;
-            }
-        }
     }
 }
