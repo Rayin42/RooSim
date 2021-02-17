@@ -206,7 +206,6 @@ namespace RooStatsSim.User
     public class GEAR
     {
         //public ObservableCollection<ItemDB> List { get; }
-
         [Serializable]
         public class EquipGear
         {
@@ -219,8 +218,18 @@ namespace RooStatsSim.User
                 Point = point;
             }
 
+            [JsonIgnore] public ItemDB GearInfo { get; set; }
+
+            int _equip;
+            public int Equip
+            {
+                get { return _equip; }
+                set { _equip = value; GearInfo = MainWindow._roo_db.Gear_db[Equip]; }
+            }
 
         }
+        public List<EquipGear> GearList { get; set; }
+
         public GEAR()
         {
             //List = new ObservableCollection<ItemDB>();
@@ -231,11 +240,30 @@ namespace RooStatsSim.User
             //    List.Add(new ItemDB());
             //}
 
-
+            GearList = new List<EquipGear>();
 
 
 
         }
+
+        public UserItem GetOption()
+        {
+            UserItem option = new UserItem();
+            foreach (EquipGear equipment in GearList)
+            {
+                if (equipment == null)
+                    continue;
+
+                if (Equip._gear_db.Dic[equipment.Name].IsAdvanced)
+                    option += Equip._gear_db.Dic[equipment.Name].OPTION[equipment.Point];
+                else
+                    option += (Equip._gear_db.Dic[equipment.Name].OPTION[0] * equipment.Point);
+
+                //option += equipment.GearInfo;
+            }
+            return option;
+        }
+
         //private void OnListChanged(object sender, NotifyCollectionChangedEventArgs args)
         //{
         //    //if (Convert.ToInt32(args.NewItems[0]) < 0)
