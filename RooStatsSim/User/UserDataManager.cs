@@ -72,6 +72,7 @@ namespace RooStatsSim.User
             CalcUserItem += Data.User_ConBuff.GetOption();
             //장비 옵션
             CalcUserItem += Data.Equip.GetOption();
+            CalcUserItem += Data.Gear.GetOption();
             //스텟 옵션
             CalcUserItem.Option_ITYPE[Enum.GetName(typeof(ITYPE), ITYPE.STATUS_ATK)] = StatusATK.GetStatusATK(ATTACK_TYPE.MELEE_TYPE, Data);
             Data.Status.SetAddStatus(_dic_user_data[SavePointNumber].User_Item);

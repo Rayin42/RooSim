@@ -226,9 +226,21 @@ namespace RooStatsSim.User
                 get { return _equip; }
                 set { _equip = value; GearInfo = MainWindow._roo_db.Gear_db[Equip]; }
             }
-
+            
         }
         public List<EquipGear> GearList { get; set; }
+
+        public void AddGear(string input_gear, int point)
+        {
+            if (GearList.Count < 6)
+                GearList.Add(new EquipGear(input_gear, point));
+            else
+            {
+                GearList.Insert(0, new EquipGear(input_gear, point));
+                GearList.RemoveAt(6);
+            }
+        }
+
 
         public GEAR()
         {
@@ -259,7 +271,7 @@ namespace RooStatsSim.User
                 else
                     option += (Equip._gear_db.Dic[equipment.Name].OPTION[0] * equipment.Point);
 
-                //option += equipment.GearInfo;
+                option += equipment.GearInfo;
             }
             return option;
         }

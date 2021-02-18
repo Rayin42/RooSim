@@ -290,6 +290,7 @@ namespace RooStatsSim.UI.Equipment
             GearList = new ItemListFilter(ITEM_TYPE_ENUM.GEAR, now_selected_equip_type);
             ItemSelector.ItemsSource = GearList;
             
+            //need visible setting
             CardSelected.IsEnabled = false;
             CardSelector.IsEnabled = false;
             EnchantSelected.IsEnabled = false;
